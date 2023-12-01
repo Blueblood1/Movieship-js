@@ -1,0 +1,108 @@
+<div
+  infiniteScroll
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="50"
+  (scrolled)="onScroll()">
+  <div class="comment-list-container">
+    <h3>Reviews</h3>
+    <form [formGroup]="fieldLogicFormGroup">
+      <p-rating
+        formControlName="rating"
+        [stars]="10"
+        [cancel]="false"></p-rating>
+      <button
+        *ngIf="fieldState === 'CREATE'"
+        (click)="onCreate()"
+        pButton
+        [style]="{ padding: '0.25rem', margin: '0.5rem' }"
+        type="button"
+        label="Review"
+        class="p-button-success"
+        icon="pi pi-file-edit"
+        iconPos="left"></button>
+      <span
+        [style]="{ marginTop: '1.5rem' }"
+        class="p-float-label margin-field">
+        <textarea
+          type="text"
+          class="form-control"
+          id="comment"
+          formControlName="comment"
+          [ngClass]="{
+            'p-filled': fieldLogic.comment?.control?.value !== ''
+          }"
+          [rows]="2"
+          [cols]="125"
+          [autoResize]="true"
+          pInputTextarea></textarea>
+        <label for="comment">comment</label>
+      </span>
+    </form>
+    <button
+      *ngIf="fieldState === 'EDIT' && fieldLogicFormGroup.dirty"
+      (click)="onUpdate()"
+      pButton
+      [style]="{ padding: '0.25rem', margin: '0.5rem' }"
+      type="button"
+      label="Edit"
+      class="p-button-success"
+      icon="pi pi-file-edit"
+      iconPos="left"></button>
+    <button
+      *ngIf="fieldState === 'EDIT'"
+      (click)="onDelete()"
+      pButton
+      [style]="{ padding: '0.25rem', margin: '0.5rem' }"
+      type="button"
+      label="Delete"
+      class="p-button-danger"
+      icon="pi pi-delete-left"
+      iconPos="left"></button>
+
+    <li class="comment-list-item" *ngFor="let comment of listing">
+      <div class="comment">
+        <div [style]="{ display: 'flex' }">
+          <span>{{ comment.username }}</span>
+          <span class="comment-list-item-content-header">{{
+            +comment.timestamp * 1000 | timeago: 'live'
+          }}</span>
+          <p-rating
+            [style]="{ marginLeft: 'auto', marginRight: '1rem' }"
+            [(ngModel)]="comment.rating"
+            [stars]="10"
+            [cancel]="false"
+            [readonly]="true"></p-rating>
+        </div>
+
+        <textarea
+          [ngModel]="comment.comment"
+          pInputTextarea
+          [rows]="1"
+          [cols]="125"
+          [autoResize]="true"
+          disabled></textarea>
+      </div>
+    </li>
+  </div>
+</div>
+
+<!--/        <div class="comment-list-item-container">-->
+<!--          <span *ngIf="!comment.isCurrentUserComment">{{-->
+<!--            comment.comment-->
+<!--            }}</span>-->
+
+<!--  &lt;!&ndash;              <input type="text" value="PrimeNG" pInputText />&ndash;&gt;-->
+<!--  <textarea [rows]="1" [cols]="50" pInputTextarea [autoResize]="true">{{-->
+<!--    comment.comment-->
+<!--    }}</textarea>-->
+
+<!--  &lt;!&ndash;          <p-inplace&ndash;&gt;-->
+<!--  &lt;!&ndash;            *ngIf="comment.isCurrentUserComment"&ndash;&gt;-->
+<!--  &lt;!&ndash;            [closable]="true"&ndash;&gt;-->
+<!--  &lt;!&ndash;            [preventClick]="false">&ndash;&gt;-->
+<!--  &lt;!&ndash;            <ng-template pTemplate="display"> </ng-template>&ndash;&gt;-->
+<!--  &lt;!&ndash;            <ng-template pTemplate="content"> </ng-template>&ndash;&gt;-->
+<!--  &lt;!&ndash;          </p-inplace>&ndash;&gt;-->
+<!--  &lt;!&ndash;          <span>{{ comment.user }}</span>&ndash;&gt;-->
+<!--  &lt;!&ndash;          <span>{{ +comment.timestamp * 1000 | timeago: 'live' }}</span>&ndash;&gt;-->
+<!--</div>-->

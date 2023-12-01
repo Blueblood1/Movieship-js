@@ -1,0 +1,8 @@
+.primary-area {
+  height: 100%;
+}
+
+.primary-scroll-area {
+  overflow-y: auto;
+  height: calc(100% - 80px);
+}

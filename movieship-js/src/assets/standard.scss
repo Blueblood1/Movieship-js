@@ -1,0 +1,12 @@
+@import 'variables';
+
+:root {
+  --primary-color: #5cb663;
+}
+
+html,
+body {
+  color: $bg-font-primary;
+  background: $bg-primary;
+  margin: 3rem 0 0;
+}

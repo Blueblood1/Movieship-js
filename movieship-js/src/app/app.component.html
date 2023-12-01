@@ -1,0 +1,19 @@
+<div>
+  <p-menubar [model]="items" [style]="{ borderRadius: 0, border: 0 }">
+    <ng-template pTemplate="start">
+      <div [style]="{ display: 'flex' }">
+        <img
+          src="assets/hm_white.png"
+          alt=""
+          height="42px"
+          routerLink=""
+          [style]="{
+            paddingRight: '1rem',
+            cursor: 'pointer'
+          }" />
+      </div>
+    </ng-template>
+  </p-menubar>
+  <router-outlet></router-outlet>
+  <p-toast position="bottom-center"></p-toast>
+</div>

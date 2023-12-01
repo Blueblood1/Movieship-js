@@ -1,0 +1,88 @@
+<div class="comment-list-container">
+  <p-confirmDialog
+    header="Confirmation"
+    icon="pi pi-exclamation-triangle"></p-confirmDialog>
+  <div [style]="{ display: 'flex', flexDirection: 'column' }">
+    <h1 [style]="{ margin: '0', marginBottom: '1rem' }">Watchlists</h1>
+    <p-dropdown
+      [options]="listing || []"
+      [style]="{ marginBottom: '0.5rem', marginTop: '1.5rem' }"
+      [(ngModel)]="resource"
+      (onChange)="selectResource($event)"
+      [autoDisplayFirst]="false"
+      optionLabel="title"></p-dropdown>
+    <button
+      *ngIf="selectedResourceHasMovie() === 'ADD'"
+      (click)="confirm()"
+      pButton
+      icon="pi pi-plus-circle"
+      class="p-button-success"
+      label="Add to watchlist"></button>
+    <button
+      *ngIf="selectedResourceHasMovie() === 'REMOVE'"
+      (click)="confirm()"
+      pButton
+      icon="pi pi-minus-circle"
+      class="p-button-danger"
+      label="Remove from watchlist"></button>
+  </div>
+  <div style="margin-top: auto; margin-left: auto">
+    <form [formGroup]="fieldLogicFormGroup">
+      <span
+        [style]="{ marginLeft: '0.5rem' }"
+        *ngIf="fieldState === 'CREATE' || fieldState === 'EDIT'"
+        class="p-float-label margin-field">
+        <input
+          type="text"
+          class="form-control"
+          id="sm-title"
+          formControlName="title"
+          [ngClass]="{
+            'p-filled': searchLogic.title?.control?.value !== ''
+          }"
+          pInputText />
+        <label for="sm-title">title</label>
+      </span>
+      <button
+        *ngIf="fieldState === 'LOADING' || fieldState === 'EDIT'"
+        (click)="onCreateListItem()"
+        pButton
+        [style]="{ padding: '0.25rem', margin: '0.5rem' }"
+        type="button"
+        label="Create new"
+        class="p-button-success"
+        icon="pi pi-file-edit"
+        iconPos="left"></button>
+      <button
+        *ngIf="fieldState === 'CREATE'"
+        (click)="onCreate()"
+        pButton
+        [style]="{ padding: '0.25rem', margin: '0.5rem' }"
+        type="button"
+        label="Create"
+        class="p-button-success"
+        icon="pi pi-file-edit"
+        iconPos="left"></button>
+      <button
+        *ngIf="resource && resource._id"
+        (click)="onUpdate()"
+        pButton
+        [style]="{ padding: '0.25rem', margin: '0.5rem' }"
+        type="button"
+        label="Edit"
+        class="p-button-success"
+        icon="pi pi-file-edit"
+        iconPos="left"></button>
+      <button
+        *ngIf="resource && resource._id"
+        (click)="confirmDeleteWatchlist()"
+        pButton
+        [style]="{ padding: '0.25rem', margin: '0.5rem' }"
+        type="button"
+        label="Delete"
+        class="p-button-danger"
+        icon="pi pi-delete-left"
+        iconPos="left"></button>
+    </form>
+  </div>
+</div>

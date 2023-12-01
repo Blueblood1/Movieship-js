@@ -1,0 +1,231 @@
+<div>
+  <div *ngIf="resource">
+    <div class="page-container-with-padding">
+      <div class="video-details-container">
+        <div>
+          <h2>{{ resource.primaryTitle }}</h2>
+          <span>{{ resource.originalTitle }}</span>
+          <span>{{ resource.titleType }}</span>
+          <span>{{ resource.startYear }}</span>
+          <span>{{ resource.endYear }}</span>
+          <span>{{ resource.runtimeMinutes }} minutes</span>
+          <div
+            [style]="{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'left'
+            }">
+            <p-chip
+              [style]="{ margin: '0.25rem' }"
+              *ngFor="let genre of resource.genres"
+              label="{{ genre }}"></p-chip>
+          </div>
+          <div
+            [style]="{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'left'
+            }">
+            <p-rating
+              [(ngModel)]="resource.averageRating"
+              [stars]="10"
+              [cancel]="false"
+              [readonly]="true"
+              [iconOnStyle]="{ cursor: 'auto' }"
+              [iconOffStyle]="{ cursor: 'auto' }">
+            </p-rating>
+            <span [style]="{ marginLeft: '1rem' }"
+              >({{ resource.averageRating }} from
+              {{ resource.averageRatingVotes }} votes)</span
+            >
+          </div>
+        </div>
+        <img class="video-poster" alt="" [src]="resource.poster" />
+      </div>
+      <div style="display: block">
+        <p-overlayPanel #op>
+          <ng-template pTemplate>
+            <app-watchlist-compact-component
+              [movie]="resource"></app-watchlist-compact-component>
+          </ng-template>
+        </p-overlayPanel>
+        <button
+          pButton
+          [style]="{ padding: '0.25rem', margin: '0.5rem' }"
+          type="button"
+          label="Watchlist"
+          class="p-button-success"
+          icon="pi pi-video"
+          iconPos="left"
+          (click)="op.toggle($event)"></button>
+        <button
+          pButton
+          (click)="onShare()"
+          [style]="{ padding: '0.25rem', margin: '0.5rem' }"
+          type="button"
+          label="Share"
+          icon="pi pi-share-alt"
+          iconPos="left"></button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="explore-main-content-and-search"
+    *ngIf="
+      fieldState !== 'EDIT' &&
+      (hasListing() || fieldState === 'LISTING' || fieldState === 'LOADING')
+    ">
+    <div class="search-container">
+      <p-button
+        [style]="{ padding: '0.25rem', margin: '0.5rem' }"
+        label="Filters"
+        icon="{{ expanded ? 'pi pi-filter-fill' : 'pi pi-filter' }}"
+        iconPos="left"
+        (click)="expanded = !expanded"
+        badge="{{ searchMetaDataMap.size }}"
+        badgeClass="p-badge-dot"></p-button>
+      <div *ngIf="expanded" class="row">
+        <div class="col col-md-8">
+          <form [formGroup]="searchLogicFormGroup">
+            <div class="search-row">
+              <div class="mb-3 search-field-container">
+                <span class="p-float-label margin-field">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="sm-primaryTitle"
+                    formControlName="primaryTitle"
+                    [ngClass]="{
+                      'p-filled':
+                        searchLogic.primaryTitle?.control?.value !== ''
+                    }"
+                    pInputText />
+                  <label for="sm-primaryTitle">primaryTitle</label>
+                </span>
+                <p-triStateCheckbox
+                  class="checkbox-no-wrap"
+                  formControlName="sm-o-primaryTitle"
+                  label=""
+                  checkboxTrueIcon="pi pi-sort-up"
+                  checkboxFalseIcon="pi pi-sort-down"></p-triStateCheckbox>
+              </div>
+              <p-selectButton
+                [options]="searchFilterType"
+                formControlName="sm-f-primaryTitle"
+                optionLabel="name"></p-selectButton>
+            </div>
+            <div class="search-row">
+              <div class="mb-3 search-field-container">
+                <span class="p-float-label margin-field">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="sm-imdb_id"
+                    formControlName="imdb_id"
+                    [ngClass]="{
+                      'p-filled': searchLogic.imdb_id?.control?.value !== ''
+                    }"
+                    pInputText />
+                  <label for="sm-imdb_id" class="form-label">imdb_id</label>
+                </span>
+
+                <p-triStateCheckbox
+                  class="checkbox-no-wrap"
+                  formControlName="sm-o-imdb_id"
+                  label=""
+                  checkboxTrueIcon="pi pi-sort-up"
+                  checkboxFalseIcon="pi pi-sort-down"></p-triStateCheckbox>
+              </div>
+              <p-selectButton
+                [options]="searchFilterType"
+                formControlName="sm-f-imdb_id"
+                optionLabel="name"></p-selectButton>
+            </div>
+            <div class="search-row">
+              <div class="mb-3 search-field-container">
+                <span class="p-float-label margin-field">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="sm-titleType"
+                    formControlName="titleType"
+                    [ngClass]="{
+                      'p-filled': searchLogic.titleType?.control?.value !== ''
+                    }"
+                    pInputText />
+                  <label for="sm-titleType" class="form-label">titleType</label>
+                </span>
+
+                <p-triStateCheckbox
+                  class="checkbox-no-wrap"
+                  formControlName="sm-o-titleType"
+                  label=""
+                  checkboxTrueIcon="pi pi-sort-up"
+                  checkboxFalseIcon="pi pi-sort-down"></p-triStateCheckbox>
+              </div>
+              <p-selectButton
+                [options]="searchFilterType"
+                formControlName="sm-f-titleType"
+                optionLabel="name"></p-selectButton>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div
+      [style]="{
+        width: '-webkit-fill-available',
+        marginLeft: expanded ? '10rem' : '0'
+      }">
+      <div
+        infiniteScroll
+        [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="1000"
+        (scrolled)="onScroll()">
+        <div class="video-list-container">
+          <li *ngFor="let movie of listing">
+            <div class="video-list-item">
+              <span>{{ movie.primaryTitle }}</span>
+              <span>{{ movie.startYear }}</span>
+              <p-rating
+                [(ngModel)]="movie.averageRating"
+                [stars]="10"
+                [cancel]="false"
+                [readonly]="true"
+                [iconOnStyle]="{ cursor: 'auto' }"
+                [iconOffStyle]="{ cursor: 'auto' }">
+              </p-rating>
+              <div [style]="{ display: 'flex' }">
+                <span>{{ movie.titleType }}</span>
+                <span class="list-item-content-header"
+                  >({{ movie.averageRatingVotes }} votes)</span
+                >
+              </div>
+              <img
+                [routerLink]="movie.imdb_id"
+                class="video-list-poster"
+                alt=""
+                [src]="movie.poster" />
+              <span>{{ movie.endYear }}</span>
+              <div [style]="{ display: 'flex' }">
+                <p-chip
+                  [style]="{ margin: '0.25rem' }"
+                  *ngFor="let genre of movie.genres"
+                  label="{{ genre }}"></p-chip>
+              </div>
+            </div>
+          </li>
+        </div>
+      </div>
+      <div
+        [style]="{ width: '100%', display: 'flex', justifyContent: 'center' }">
+        <p-progressSpinner *ngIf="isLoading"></p-progressSpinner>
+      </div>
+    </div>
+  </div>
+
+  <app-comment-component
+    *ngIf="fieldState === 'EDIT' && resource?.imdb_id"
+    [imdb_id]="resource!!.imdb_id"></app-comment-component>
+</div>

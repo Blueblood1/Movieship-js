@@ -1,0 +1,19 @@
+@import 'src/assets/variables';
+
+.comment-list-container {
+  margin-left: auto;
+  margin-right: auto;
+  background: $bg-secondary;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 225px;
+}
+
+.form-spacing {
+  padding: 2rem;
+}

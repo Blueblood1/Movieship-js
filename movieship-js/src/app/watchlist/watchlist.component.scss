@@ -1,0 +1,36 @@
+@import 'src/assets/variables';
+
+.comment-list-container {
+  margin-left: auto;
+  margin-right: auto;
+  background: $bg-secondary;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.form-spacing {
+  padding: 2rem;
+}
+
+.list-style {
+  list-style: none;
+}
+
+.video-list-poster {
+  border-radius: 0.25rem;
+  min-width: calc(332px - 0.5rem);
+  min-height: calc(249px - 0.5rem);
+  max-width: calc(332px - 0.5rem);
+  max-height: calc(249px - 0.5rem);
+}
+
+.watchlist-item {
+  margin: 0.25rem;
+  border-radius: 0.5rem;
+  background: $bg-primary;
+
+  h2 {
+    margin: 0.25rem;
+  }
+}

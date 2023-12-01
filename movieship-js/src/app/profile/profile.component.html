@@ -1,0 +1,78 @@
+<div [style]="{ marginLeft: '0.5rem' }">
+  <h2>Profile</h2>
+  <div class="container">
+    <div class="row">
+      <div class="col col-md-8">
+        <form [formGroup]="fieldLogicFormGroup">
+          <div class="mb-3">
+            <span class="p-float-label">
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                formControlName="name"
+                [ngClass]="{
+                  'p-filled': searchLogic.name?.control?.value !== ''
+                }"
+                pInputText />
+              <label for="name">Username</label>
+            </span>
+
+            <div
+              *ngIf="
+                fieldLogic.name &&
+                fieldLogic.name.control &&
+                fieldLogic.name.control.invalid &&
+                (fieldLogic.name.control.dirty ||
+                  fieldLogic.name.control.touched)
+              "
+              class="alert alert-danger">
+              <div *ngIf="fieldLogic.name.control.errors?.['required']">
+                Name is required.
+              </div>
+              <div *ngIf="fieldLogic.name.control.errors?.['minlength']">
+                Name must be at least 4 characters long.
+              </div>
+              <div *ngIf="fieldLogic.name.control.errors?.['forbiddenName']">
+                Name cannot be Bob.
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <button
+    *ngIf="fieldState === 'CREATE'"
+    (click)="onCreate()"
+    pButton
+    [style]="{ padding: '0.25rem', margin: '0.5rem' }"
+    type="button"
+    label="Create"
+    class="p-button-success"
+    icon="pi pi-file-edit"
+    iconPos="left"></button>
+  <button
+    *ngIf="fieldState === 'EDIT'"
+    (click)="onUpdate()"
+    pButton
+    [style]="{ padding: '0.25rem', margin: '0.5rem' }"
+    type="button"
+    label="Edit"
+    class="p-button-success"
+    icon="pi pi-file-edit"
+    iconPos="left"></button>
+
+  <app-watchlist-component [compact]="false"></app-watchlist-component>
+
+  <!--  <p-tabView-->
+  <!--    *ngIf="resource && resource.watchlist && resource.watchlist.length > 0">-->
+  <!--    <p-tabPanel-->
+  <!--      [header]="item.title"-->
+  <!--      *ngFor="let item of resource.watchlist; let i = index"-->
+  <!--      [selected]="i === 0">-->
+  <!--      {{ item.imdb_ids }}-->
+  <!--    </p-tabPanel>-->
+  <!--  </p-tabView>-->
+</div>
